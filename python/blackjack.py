@@ -1,3 +1,5 @@
+from random import randint
+
 
 class Card(object):
 	
@@ -37,6 +39,55 @@ class Card(object):
 			return (0,0)
 
 
+class Player(object):
+
+	def __init__(self,name):
+		self.name = name
+		self.Cards = []
+		self.HiddenCards = []
+
+	def get_name(self):
+		return self.name
+
+	def add_card(self,card):
+		self.Cards.append(card)
+
+	def show_cards(self):
+		for card in self.HiddenCards:
+			print ("Hidden Card")
+
+		for card in self.Cards:
+			print (card.display_name())
+
+	
+
+
+class Dealer(Player):
+
+	def __init__(self):
+		Player.__init__(self, 'Dealer')
+
+	def add_hidden_card(self,card):
+		self.HiddenCards.append(card)
+
+
+
+class OrdinaryPlayer(Player):
+	
+	def __init__(self,name,bankroll):
+		Player.__init__(self,name)
+		self.bankroll = bankroll
+
+	def get_bankroll(self):
+		return self.bankroll
+
+	def increase_bankroll(self, amount):
+		self.bankroll += amount
+
+	def decrease_bankroll(self, amount):
+		self.bankroll -= amount
+
+
 Seeds = ['Spades','Hearts','Diamonds','Clubs']
 
 Card_types = ['2', '3', '4', '5', '6', '7', '8', '9', 'Jack', 'Queen', 'King', 'Ace']
@@ -47,8 +98,31 @@ for seed in Seeds:
 	for card_type in Card_types:
 		Deck.append(Card(seed,card_type))
 
-for card in Deck:
-	print("Card = %s value = %d" %(card.display_name(), card.value()[0]))
+#for card in Deck:
+#	print("Card = %s value = %d" %(card.display_name(), card.value()[0]))
+
+
+Players_name = ['Joe', 'Mark', 'Anna']
+
+players = []
+
+dealer = Dealer()
+
+for player_name in  Players_name:
+	players.append(OrdinaryPlayer(player_name,100))
+
+
+dealer.add_card(Deck[randint(0, len(Deck))])
+dealer.add_hidden_card(Deck[randint(0, len(Deck))])
+print('Dealer:')
+dealer.show_cards()
+
+for player in players:
+	player.add_card(Deck[randint(0, len(Deck))])
+	player.add_card(Deck[randint(0, len(Deck))])
+	print(player.get_name() + ':')
+	player.show_cards()
+
 
 
 
